@@ -1,8 +1,6 @@
 const {
-  edit,
   getPaths,
   replace,
-  editWebpackPlugin,
   replaceWebpackPlugin,
   appendWebpackPlugin,
 } = require('@rescripts/utilities');
@@ -15,7 +13,7 @@ const ExtensionReloader = require('webpack-extension-reloader');
 // Import CRA's "check required files" fmodule so we can fake it out completely
 // https://blog.isquaredsoftware.com/2020/03/codebase-conversion-building-mean-with-cra/
 const craCheckRequiredFilesPath = path.resolve(
-  'node_modules',
+  paths.appNodeModules,
   'react-dev-utils',
   'checkRequiredFiles.js'
 );
@@ -99,7 +97,6 @@ module.exports = [
       'ManifestPlugin',
       config
     ),
-
   (config) =>
     appendWebpackPlugin(
       new ManifestPlugin({
@@ -151,11 +148,8 @@ module.exports = [
       }),
       config
     ),
-  (config) => {
-    // console.log('config', config.entry)
-
-    // config = appendWebpackPlugin(  new ExtensionReloader(), config
-    // );
-    return config;
-  },
+  (config) =>
+    config.mode === 'development'
+      ? appendWebpackPlugin(new ExtensionReloader(), config)
+      : config,
 ];

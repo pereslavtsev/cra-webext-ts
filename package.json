@@ -1,7 +1,16 @@
 {
-  "name": "typewiki-extension",
+  "name": "cra-webext-ts",
+  "description": "Web Extension Boilerplate powered by Create React App (CRA)",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pereslavtsev/cra-webext-ts.git"
+  },
+  "author": {
+    "name": "Vitaly Pereslavtsev",
+    "email": "dev@pereslavtsev.com",
+    "url": "https://www.pereslavtsev.com"
+  },
   "version": "0.1.0",
-  "private": true,
   "dependencies": {
     "@rescripts/cli": "^0.0.14",
     "@rescripts/rescript-env": "^0.0.12",
@@ -13,6 +22,10 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "cross-env": "^7.0.2",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "html-webpack-plugin": "^4.3.0",
     "prettier": "^2.0.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -22,12 +35,9 @@
     "webpack-manifest-plugin": "^2.2.0"
   },
   "scripts": {
+    "build": "cross-env INLINE_RUNTIME_CHUNK=false rescripts build",
     "start": "rescripts start",
-    "build": "INLINE_RUNTIME_CHUNK=false rescripts build",
     "test": "rescripts test"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "browserslist": {
     "production": [
@@ -40,8 +50,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "html-webpack-plugin": "^4.3.0"
   }
 }
