@@ -1,18 +1,25 @@
 const {edit, getPaths, replace, editWebpackPlugin, replaceWebpackPlugin, appendWebpackPlugin} = require('@rescripts/utilities')
 const paths = require('react-scripts/config/paths')
-const {resolve} = require('path')
+const path = require('path')
 const ManifestPlugin = require('webpack-manifest-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtensionReloader  = require('webpack-extension-reloader');
+
+// Import CRA's "check required files" fmodule so we can fake it out completely
+// https://blog.isquaredsoftware.com/2020/03/codebase-conversion-building-mean-with-cra/
+const craCheckRequiredFilesPath = path.resolve("node_modules/react-dev-utils/checkRequiredFiles.js");
+require(craCheckRequiredFilesPath);
+
+// Supply a fake implementation
+require.cache[craCheckRequiredFilesPath].exports = () => true;
 
 module.exports = config => {
     config.entry = {
-        //'content-script': './my-content-script.js',
-        background: resolve(paths.appSrc, 'background'),
+        content: path.resolve(paths.appSrc, 'content'),
+        background: path.resolve(paths.appSrc, 'background'),
         //options: path.join('src', 'options', 'index.tsx'),
-        popup: resolve(paths.appSrc, 'popup'),
+        popup: path.resolve(paths.appSrc, 'popup'),
     }
-
-    console.log('111', config.mode === 'production')
 
     config = replaceWebpackPlugin(
         new HtmlWebpackPlugin(
@@ -21,7 +28,7 @@ module.exports = config => {
                 {
                     inject: true,
                     filename: 'popup.html',
-                    template: resolve(paths.appSrc, paths.appPublic, 'popup.html'),
+                    template: path.resolve(paths.appSrc, paths.appPublic, 'popup.html'),
                     chunks: ['popup']
                 },
                 config.mode === 'production'
@@ -82,6 +89,10 @@ module.exports = config => {
                 fileName => !fileName.endsWith('.map')
             );
 
+            const contentScripts = entrypoints.content.filter(
+                fileName => !fileName.endsWith('.map')
+            );
+
             //console.log('files', files)
             return {
                 "short_name": "TypeWiki",
@@ -102,16 +113,19 @@ module.exports = config => {
                 "background": {
                     "scripts": backgroundFiles
                 },
-                // "content_scripts": [
-                //     {
-                //         "js": ["counter.js"],
-                //         "matches": ["*://*/*"]
-                //     }
-                // ]
+                "content_scripts": [
+                    {
+                        "js": contentScripts,
+                        "matches": ["*://*/*"]
+                    }
+                ]
             };
         },
     }), config)
 
     // console.log('config', config.entry)
+
+    config = appendWebpackPlugin(  new ExtensionReloader(), config
+    );
     return config
 }
