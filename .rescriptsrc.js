@@ -103,12 +103,6 @@ module.exports = [
         fileName: 'manifest.json',
         publicPath: paths.publicUrlOrPath,
         generate: (seed, files, entrypoints) => {
-          // const manifestFiles = files.reduce((manifest, file) => {
-          //     manifest[file.name] = file.path;
-          //     return manifest;
-          // }, seed);
-          //
-
           const backgroundFiles = entrypoints.background.filter(
             (fileName) => !fileName.endsWith('.map')
           );
@@ -116,8 +110,6 @@ module.exports = [
           const contentScripts = entrypoints.content.filter(
             (fileName) => !fileName.endsWith('.map')
           );
-
-          //console.log('files', files)
           return {
             short_name: 'TypeWiki',
             name: 'TypeWiki Extension',

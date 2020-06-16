@@ -1,9 +1,13 @@
 {
   "name": "cra-webext-ts",
   "description": "Web Extension Boilerplate powered by Create React App (CRA)",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git://github.com/pereslavtsev/cra-webext-ts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pereslavtsev/cra-webext-ts/issues"
   },
   "author": {
     "name": "Vitaly Pereslavtsev",
@@ -22,6 +26,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "concurrently": "^5.2.0",
     "cross-env": "^7.0.2",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
@@ -31,24 +36,23 @@
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
     "typescript": "~3.7.2",
+    "web-ext": "^4.2.0",
     "webpack-extension-reloader": "^1.1.4",
     "webpack-manifest-plugin": "^2.2.0"
   },
   "scripts": {
     "build": "cross-env INLINE_RUNTIME_CHUNK=false rescripts build",
-    "start": "rescripts start",
+    "dev": "cross-env BROWSER=none rescripts start",
+    "lint:ext": "web-ext lint",
+    "package": "web-ext build",
+    "start": "web-ext run",
+    "start:android": "yarn start -t firefox-android",
+    "start:chrome": "yarn start -t chromium",
+    "start:firefox": "yarn start -t firefox-desktop",
     "test": "rescripts test"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+  "keywords": [
+    "webextension",
+    "web"
+  ]
 }
