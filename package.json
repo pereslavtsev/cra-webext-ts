@@ -23,7 +23,7 @@
   "scripts": {
     "build": "cross-env INLINE_RUNTIME_CHUNK=false rescripts build",
     "clear": "rimraf dist",
-    "dev": "concurrently -n CRA,web-ext \"cross-env BROWSER=none rescripts start\" \"web-ext --config=web-ext-config.dev.js run -t chromium\"",
+    "dev": "concurrently -n CRA,web-ext -c cyan,yellow \"cross-env BROWSER=none rescripts start\" \"web-ext --config=web-ext-config.dev.js run -t chromium\"",
     "lint:ext": "web-ext lint",
     "package": "web-ext build",
     "postinstall": "patch-package",
