@@ -1,4 +1,5 @@
 const {
+  edit,
   getPaths,
   replace,
   replaceWebpackPlugin,
@@ -8,7 +9,6 @@ const paths = require('react-scripts/config/paths');
 const path = require('path');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtensionReloader = require('webpack-extension-reloader');
 
 // Import CRA's "check required files" fmodule so we can fake it out completely
 // https://blog.isquaredsoftware.com/2020/03/codebase-conversion-building-mean-with-cra/
@@ -39,6 +39,24 @@ module.exports = [
         popup: path.resolve(paths.appSrc, 'popup'),
       },
       entryPaths,
+      config
+    );
+  },
+  (config) => {
+    if (config.mode === 'production') {
+      return config;
+    }
+    const outputPaths = getPaths(
+      (inQuestion) =>
+        inQuestion && inQuestion.filename && inQuestion.chunkFilename,
+      config
+    );
+    return edit(
+      (o) => {
+        o.filename = o.filename.replace(/bundle/, '[name]');
+        return o;
+      },
+      outputPaths,
       config
     );
   },
@@ -140,8 +158,4 @@ module.exports = [
       }),
       config
     ),
-  (config) =>
-    config.mode === 'development'
-      ? appendWebpackPlugin(new ExtensionReloader(), config)
-      : config,
 ];

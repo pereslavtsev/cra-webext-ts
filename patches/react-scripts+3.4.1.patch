@@ -1,0 +1,12 @@
+diff --git a/node_modules/react-scripts/config/webpackDevServer.config.js b/node_modules/react-scripts/config/webpackDevServer.config.js
+index bd91927..8ef36ea 100644
+--- a/node_modules/react-scripts/config/webpackDevServer.config.js
++++ b/node_modules/react-scripts/config/webpackDevServer.config.js
+@@ -63,6 +63,7 @@ module.exports = function(proxy, allowedHost) {
+     // use an image, put it in `src` and `import` it from JavaScript instead.
+     contentBase: paths.appPublic,
+     contentBasePublicPath: paths.publicUrlOrPath,
++    writeToDisk: true,
+     // By default files from `contentBase` will not trigger a page reload.
+     watchContentBase: true,
+     // Enable hot reloading server. It will provide WDS_SOCKET_PATH endpoint
