@@ -1,0 +1,15 @@
+{
+  "short_name": "TypeWiki",
+  "name": "TypeWiki Extension",
+  "description": "Powerful MediaWiki editor",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "browser_action": {
+    "default_title": "TypeWiki",
+    "default_popup": "popup.html"
+  },
+  "options_ui": {
+    "page": "options.html"
+  },
+  "permissions": ["storage"]
+}

@@ -1,3 +1,23 @@
+diff --git a/node_modules/react-scripts/config/paths.js b/node_modules/react-scripts/config/paths.js
+index 11d81b7..17797e3 100644
+--- a/node_modules/react-scripts/config/paths.js
++++ b/node_modules/react-scripts/config/paths.js
+@@ -63,6 +63,7 @@ module.exports = {
+   appBuild: resolveApp('build'),
+   appPublic: resolveApp('public'),
+   appHtml: resolveApp('public/index.html'),
++  appManifest: resolveApp('public/manifest.json'),
+   appIndexJs: resolveModule(resolveApp, 'src/index'),
+   appPackageJson: resolveApp('package.json'),
+   appSrc: resolveApp('src'),
+@@ -85,6 +86,7 @@ module.exports = {
+   appBuild: resolveApp('build'),
+   appPublic: resolveApp('public'),
+   appHtml: resolveApp('public/index.html'),
++  appManifest: resolveApp('public/manifest.json'),
+   appIndexJs: resolveModule(resolveApp, 'src/index'),
+   appPackageJson: resolveApp('package.json'),
+   appSrc: resolveApp('src'),
 diff --git a/node_modules/react-scripts/config/webpackDevServer.config.js b/node_modules/react-scripts/config/webpackDevServer.config.js
 index bd91927..8ef36ea 100644
 --- a/node_modules/react-scripts/config/webpackDevServer.config.js
