@@ -20,6 +20,9 @@
     "webextension",
     "web"
   ],
+  "engines": {
+    "node": ">=12.0.0"
+  },
   "scripts": {
     "build": "cross-env INLINE_RUNTIME_CHUNK=false rescripts build",
     "dev": "node scripts/dev",
@@ -33,6 +36,7 @@
     "test": "rescripts test"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.3.6",
     "@rescripts/cli": "^0.0.14",
     "@rescripts/rescript-env": "^0.0.12",
     "@rescripts/utilities": "^0.0.7",
@@ -43,6 +47,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "@types/react-redux": "^7.1.9",
     "concurrently": "^5.2.0",
     "copy-webpack-plugin": "^6.0.2",
     "cross-env": "^7.0.2",
@@ -53,11 +58,14 @@
     "prettier": "^2.0.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-redux": "^7.2.0",
     "react-scripts": "3.4.1",
+    "redux": "^4.0.5",
     "rimraf": "^3.0.2",
     "sharp": "^0.25.4",
     "typescript": "~3.7.2",
     "wait-on": "^5.0.1",
-    "web-ext": "^4.2.0"
+    "web-ext": "^4.2.0",
+    "webext-redux": "^2.1.7"
   }
 }

@@ -191,18 +191,30 @@ module.exports = [
             return [size, iconFile.path];
           })
         );
-        return Object.assign({}, appManifest, {
-          icons,
-          background: {
-            scripts: backgroundFiles,
+        return Object.assign(
+          {},
+          appManifest,
+          {
+            icons,
           },
-          content_scripts: [
-            {
-              js: contentScripts,
-              matches: ['*://*/*'],
-            },
-          ],
-        });
+          hasBackground
+            ? {
+                background: {
+                  scripts: backgroundFiles,
+                },
+              }
+            : undefined,
+          hasContent
+            ? {
+                content_scripts: [
+                  {
+                    js: contentScripts,
+                    matches: ['*://*/*'],
+                  },
+                ],
+              }
+            : undefined
+        );
       },
     });
     const newManifestPlugin = Object.assign(
