@@ -1,11 +1,11 @@
 {
-  "short_name": "TypeWiki",
-  "name": "TypeWiki Extension",
-  "description": "Powerful MediaWiki editor",
+  "short_name": "cra-webext-ts",
+  "name": "Web Extension",
+  "description": "Web Extension Boilerplate powered by Create React App (CRA)",
   "version": "0.0.1",
   "manifest_version": 2,
   "browser_action": {
-    "default_title": "TypeWiki",
+    "default_title": "Extension Popup",
     "default_popup": "popup.html"
   },
   "options_ui": {

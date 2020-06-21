@@ -1,6 +1,5 @@
 const {
   appendWebpackPlugin,
-  editWebpackPlugin,
   getPaths,
   getWebpackPlugin,
   replace,

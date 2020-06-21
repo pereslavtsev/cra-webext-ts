@@ -25,7 +25,8 @@
     "react-redux",
     "extension",
     "webextension",
-    "web"
+    "web",
+    "web-ext"
   ],
   "engines": {
     "node": ">=12.0.0"

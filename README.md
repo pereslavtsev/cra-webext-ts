@@ -1,4 +1,12 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## What's in the package?
+- ⚛️&nbsp;&nbsp;[`react`][react] for building UI. This repo was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) with a [`--template redux-typescript`](https://github.com/reduxjs/cra-template-redux-typescript) parameter.
+- ▶️️&nbsp;&nbsp;[`rescripts`][rescripts] for editing CRA's configuration [without ejecting](https://create-react-app.dev/docs/alternatives-to-ejecting/).
+- 🔄&nbsp;&nbsp;[`webext-redux`][webext-redux] is a set of utilities for building a Redux-based web extension.
+- 🔎&nbsp;&nbsp;[`redux-logger`][redux-logger] is the awesome redux middleware for logging.
+
+## Requirements
+- ⚙️&nbsp;&nbsp;[Node.js](https://nodejs.org/en/) v12 or above
+- 🌐&nbsp;&nbsp;[Firefox](https://www.mozilla.org/ru/firefox/) or [Chrome](https://www.google.com/chrome/) browsers
 
 ## Available Scripts
 
@@ -19,7 +27,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 ### `yarn build`
 
-Builds the app for production to the `build` folder.<br />
+Builds the extension for production to the `build` folder.<br />
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.<br />
@@ -42,3 +50,12 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+# License
+
+MIT.
+
+[react]: https://reactjs.org/
+[redux-logger]: https://github.com/LogRocket/redux-logger
+[rescripts]: https://github.com/harrysolovay/rescripts
+[webext-redux]: https://github.com/tshaddix/webext-redux
