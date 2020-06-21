@@ -11,5 +11,11 @@
   "options_ui": {
     "page": "options.html"
   },
-  "permissions": ["storage"]
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "js": "../src/counter/index.ts",
+      "matches": ["*://*/*"]
+    }
+  ]
 }

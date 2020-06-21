@@ -1,36 +1,20 @@
 const {
   appendWebpackPlugin,
-  edit,
   editWebpackPlugin,
   getPaths,
   getWebpackPlugin,
-  prependWebpackPlugin,
   replace,
-  removeWebpackPlugin,
 } = require('@rescripts/utilities');
-const paths = require('react-scripts/config/paths');
+const {
+  copyAssets,
+  fixAssetManifest,
+  fixOutput,
+  generateHtml,
+  generateIcons,
+  paths,
+} = require('./utils');
 const path = require('path');
 const fs = require('fs');
-const sharp = require('sharp');
-const CopyPlugin = require('copy-webpack-plugin');
-
-// Add new paths
-paths.appBackgroundSrc = path.resolve(paths.appSrc, 'background');
-paths.appContentSrc = path.resolve(paths.appSrc, 'content');
-paths.appOptionsSrc = path.resolve(paths.appSrc, 'options');
-paths.appPopupSrc = path.resolve(paths.appSrc, 'popup');
-
-// Import CRA's "check required files" fmodule so we can fake it out completely
-// https://blog.isquaredsoftware.com/2020/03/codebase-conversion-building-mean-with-cra/
-const craCheckRequiredFilesPath = path.resolve(
-  paths.appNodeModules,
-  'react-dev-utils',
-  'checkRequiredFiles.js'
-);
-require(craCheckRequiredFilesPath);
-
-// Supply a fake implementation
-require.cache[craCheckRequiredFilesPath].exports = () => true;
 
 // Load a base extension config from manifest.json
 const appManifest = require(paths.appManifest);
@@ -70,107 +54,15 @@ module.exports = [
       config
     );
   },
-  (config) => {
-    if (config.mode === 'production') {
-      return config;
-    }
-    const outputPaths = getPaths(
-      (inQuestion) =>
-        inQuestion && inQuestion.filename && inQuestion.chunkFilename,
-      config
-    );
-    return edit(
-      (o) => {
-        o.filename = o.filename.replace(/bundle/, '[name]');
-        return o;
-      },
-      outputPaths,
-      config
-    );
-  },
-  (config) =>
-    editWebpackPlugin(
-      (p) => {
-        p.opts.generate = (seed, files, entrypoints) => {
-          const manifestFiles = files.reduce((manifest, file) => {
-            manifest[file.name] = file.path;
-            return manifest;
-          }, seed);
-          const entrypointFiles = Object.values(entrypoints)
-            .flat()
-            .filter((fileName) => !fileName.endsWith('.map'));
-
-          return {
-            files: manifestFiles,
-            entrypoints: entrypointFiles,
-          };
-        };
-        return p;
-      },
-      'ManifestPlugin',
-      config
-    ),
-  (config) => {
-    const htmlWebpackPlugin = getWebpackPlugin('HtmlWebpackPlugin', config);
-
-    // Remove a HtmlWebpackPlugin instance for index.html
-    config = removeWebpackPlugin('HtmlWebpackPlugin', config);
-
-    // Append multiple html files for each entry
-    Object.entries(pages).forEach(([entry, filename]) => {
-      const newHtmlWebpackPlugin = Object.assign(
-        Object.create(Object.getPrototypeOf(htmlWebpackPlugin)),
-        {
-          options: Object.assign({}, htmlWebpackPlugin.options, {
-            filename,
-            template: path.resolve(paths.appPublic, filename),
-            chunks: [entry],
-          }),
-        }
-      );
-      config = appendWebpackPlugin(newHtmlWebpackPlugin, config);
-    });
-    return config;
-  },
-  (config) => {
-    if (config.mode !== 'development') {
-      return config;
-    }
-    return prependWebpackPlugin(
-      new CopyPlugin({
-        patterns: [
-          {
-            from: paths.appPublic,
-            globOptions: {
-              dots: true,
-              ignore: [
-                // Ignore user's manifest.json
-                'manifest.json',
-                'icon.png',
-                // Ignore UI pages
-                ...Object.entries(pages).map(([, filename]) => filename),
-              ],
-            },
-          },
-        ],
-      }),
-      config
-    );
-  },
+  fixAssetManifest(),
+  fixOutput(),
+  generateHtml(pages),
+  copyAssets(pages),
+  // Generate extension icons from the icon.png file
+  generateIcons(path.resolve(paths.appPublic, 'icon.png'), ICON_SIZES),
+  // Generate an extension manfifest.json file based on the user's manifest from public folder
   (config) => {
     const manifestPlugin = getWebpackPlugin('ManifestPlugin', config);
-
-    config = appendWebpackPlugin(
-      new CopyPlugin({
-        patterns: ICON_SIZES.map((size) => ({
-          from: path.resolve(paths.appPublic, 'icon.png'),
-          to: `static/icons/[name]@${size}.[hash:8].[ext]`,
-          flatten: true,
-          transform: (content) => sharp(content).resize(size).toBuffer(),
-        })),
-      }),
-      config
-    );
     const opts = Object.assign({}, manifestPlugin.opts, {
       fileName: 'manifest.json',
       generate: (seed, files, entrypoints) => {
@@ -203,7 +95,7 @@ module.exports = [
                   scripts: backgroundFiles,
                 },
               }
-            : undefined,
+            : {},
           hasContent
             ? {
                 content_scripts: [
@@ -213,7 +105,13 @@ module.exports = [
                   },
                 ],
               }
-            : undefined
+            : {},
+          config.mode === 'development'
+            ? {
+                content_security_policy:
+                  "script-src 'self' http://localhost:*; object-src 'self'",
+              }
+            : {}
         );
       },
     });
