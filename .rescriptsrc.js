@@ -8,6 +8,7 @@ const {
   copyAssets,
   fixAssetManifest,
   fixOutput,
+  locateContentScripts,
   generateHtml,
   generateIcons,
   paths,
@@ -17,6 +18,8 @@ const fs = require('fs');
 
 // Load a base extension config from manifest.json
 const appManifest = require(paths.appManifest);
+
+const contentScripts = locateContentScripts(paths.appContentSrc);
 
 const hasContent = fs.existsSync(paths.appContentSrc);
 const hasBackground = fs.existsSync(paths.appBackgroundSrc);
@@ -44,10 +47,10 @@ module.exports = [
     );
     return replace(
       {
-        content: hasContent ? paths.appContentSrc : undefined,
         background: hasBackground ? paths.appBackgroundSrc : undefined,
         options: hasOptions ? paths.appOptionsSrc : undefined,
         popup: hasPopup ? paths.appPopupSrc : undefined,
+        ...contentScripts,
       },
       entryPaths,
       config
@@ -68,8 +71,13 @@ module.exports = [
         const backgroundFiles = entrypoints.background.filter(
           (fileName) => !fileName.endsWith('.map')
         );
-        const contentScripts = entrypoints.content.filter(
-          (fileName) => !fileName.endsWith('.map')
+        const contentScriptsFiles = Object.fromEntries(
+          Object.keys(contentScripts).map((script) => [
+            script,
+            entrypoints[script].filter(
+              (fileName) => !fileName.endsWith('.map')
+            ),
+          ])
         );
         const iconsFiles = files.filter((file) =>
           file.name.startsWith('static/icons/icon')
@@ -97,12 +105,11 @@ module.exports = [
             : {},
           hasContent
             ? {
-                content_scripts: [
-                  {
-                    js: contentScripts,
-                    matches: ['*://*/*'],
-                  },
-                ],
+                content_scripts: appManifest.content_scripts.map((cs) =>
+                  Object.assign({}, cs, {
+                    js: contentScriptsFiles[cs.js],
+                  })
+                ),
               }
             : {},
           config.mode === 'development'

@@ -14,7 +14,7 @@
   "permissions": ["storage"],
   "content_scripts": [
     {
-      "js": "../src/counter/index.ts",
+      "js": "counter",
       "matches": ["*://*/*"]
     }
   ]
