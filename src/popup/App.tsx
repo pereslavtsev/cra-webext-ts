@@ -10,7 +10,7 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <Counter />
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+          54545 <code>src/App.tsx</code> and save to reload.
         </p>
         <span>
           <span>Learn </span>

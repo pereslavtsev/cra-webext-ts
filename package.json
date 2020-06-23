@@ -56,6 +56,7 @@
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@types/react-redux": "^7.1.9",
+    "@types/redux-logger": "^3.0.8",
     "concurrently": "^5.2.0",
     "copy-webpack-plugin": "^6.0.2",
     "cross-env": "^7.0.2",
@@ -71,11 +72,13 @@
     "react-scripts": "3.4.1",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
+    "redux-logger": "^3.0.6",
     "rimraf": "^3.0.2",
     "sharp": "^0.25.4",
     "typescript": "~3.7.2",
     "wait-on": "^5.0.1",
     "web-ext": "^4.2.0",
-    "webext-redux": "^2.1.7"
+    "webext-redux": "^2.1.7",
+    "webextension-polyfill": "^0.6.0"
   }
 }

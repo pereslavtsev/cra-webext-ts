@@ -1,19 +1,23 @@
 import {
-  configureStore,
-  getDefaultMiddleware,
   ThunkAction,
   Action,
+  combineReducers,
+  createStore,
+  applyMiddleware,
 } from '@reduxjs/toolkit';
 import counterReducer from '../features/counter/counterSlice';
-const middleware = [...getDefaultMiddleware()];
+import logger from 'redux-logger';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
-export const store = configureStore({
-  reducer: {
-    counter: counterReducer,
-  },
-  middleware,
-  devTools: process.env.NODE_ENV !== 'production',
+const reducer = combineReducers({
+  counter: counterReducer,
 });
+
+const middleware = [logger];
+export const store = createStore(
+  reducer,
+  composeWithDevTools(applyMiddleware(...middleware))
+);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppThunk<ReturnType = void> = ThunkAction<
